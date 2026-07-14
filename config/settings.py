@@ -1,4 +1,4 @@
-XMPP_SERVER = "localhost"
+XMPP_DOMAIN = "localhost"
 
 ORDER_AGENT_JID = "order@localhost"
 ORDER_AGENT_PASSWORD = "order123"
