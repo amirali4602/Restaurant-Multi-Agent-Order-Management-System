@@ -1,2 +1,2 @@
 # Restaurant Multi-Agent Order Management System
-A Python application where four autonomous agents collaborate to process a restaurant order.
+A desktop application built with PySide6 where autonomous SPADE agents collaborate to process restaurant orders through asynchronous message passing.
