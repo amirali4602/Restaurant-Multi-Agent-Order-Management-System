@@ -1,23 +1,24 @@
 from PySide6.QtWidgets import QLabel
-from PySide6.QtWidgets import QVBoxLayout
-from PySide6.QtWidgets import QWidget
+from PySide6.QtWidgets import QGroupBox
+from PySide6.QtWidgets import QFormLayout
 
 
-class ResultPanel(QWidget):
+class ResultPanel(QGroupBox):
 
     def __init__(self):
-        super().__init__()
+        super().__init__("Final Result")
 
-        layout = QVBoxLayout(self)
+        layout = QFormLayout(self)
 
-        layout.addWidget(QLabel("Final Result"))
+        self.status = QLabel("Waiting")
 
-        self.status = QLabel("Order Status : Waiting")
-        self.driver = QLabel("Driver : -")
-        self.cooking = QLabel("Cooking Time : -")
-        self.delivery = QLabel("Delivery ETA : -")
+        self.driver = QLabel("-")
 
-        layout.addWidget(self.status)
-        layout.addWidget(self.driver)
-        layout.addWidget(self.cooking)
-        layout.addWidget(self.delivery)
+        self.cooking = QLabel("-")
+
+        self.delivery = QLabel("-")
+
+        layout.addRow("Order Status :", self.status)
+        layout.addRow("Assigned Driver :", self.driver)
+        layout.addRow("Cooking Time :", self.cooking)
+        layout.addRow("Delivery ETA :", self.delivery)

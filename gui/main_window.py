@@ -1,14 +1,17 @@
 from PySide6.QtWidgets import (
-    QMainWindow,
-    QWidget,
-    QVBoxLayout,
     QHBoxLayout,
+    QMainWindow,
+    QVBoxLayout,
+    QWidget,
 )
 
 from gui.widgets.menu_panel import MenuPanel
+from gui.widgets.agent_monitor import AgentMonitor
 from gui.widgets.activity_panel import ActivityPanel
 from gui.widgets.result_panel import ResultPanel
-
+from PySide6.QtCore import Qt
+from PySide6.QtWidgets import QLabel
+from PySide6.QtGui import QIcon
 
 class MainWindow(QMainWindow):
 
@@ -16,7 +19,9 @@ class MainWindow(QMainWindow):
         super().__init__()
 
         self.setWindowTitle("Restaurant Multi-Agent System")
-        self.resize(1200, 700)
+        self.setWindowIcon(QIcon("assets/restaurant.png"))
+        self.setMinimumSize(1200,700)
+        self.resize(1200,700)
 
         central = QWidget()
 
@@ -26,16 +31,34 @@ class MainWindow(QMainWindow):
 
         top = QHBoxLayout()
 
-        self.menu_panel = MenuPanel()
+        left = QVBoxLayout()
 
-        self.activity_panel = ActivityPanel()
+        right = QVBoxLayout()
 
-        top.addWidget(self.menu_panel, 1)
+        self.menu = MenuPanel()
 
-        top.addWidget(self.activity_panel, 2)
+        self.monitor = AgentMonitor()
+
+        self.activity = ActivityPanel()
+
+        self.result = ResultPanel()
+
+        left.addWidget(self.menu)
+
+        right.addWidget(self.monitor)
+
+        right.addWidget(self.activity)
+
+        top.addLayout(left, 1)
+
+        top.addLayout(right, 2)
+        title = QLabel("🍽 Restaurant Multi-Agent Order Management System")
+        title.setObjectName("appTitle")
+        title.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        root.addWidget(title)
 
         root.addLayout(top)
 
-        self.result_panel = ResultPanel()
-
-        root.addWidget(self.result_panel)
+        root.addWidget(self.result)
+        self.statusBar().showMessage("🟢 System Ready")

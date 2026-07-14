@@ -1,26 +1,27 @@
 from PySide6.QtWidgets import QTextEdit
 from PySide6.QtWidgets import QVBoxLayout
-from PySide6.QtWidgets import QWidget
-from PySide6.QtWidgets import QLabel
+from PySide6.QtWidgets import QGroupBox
 
 
-class ActivityPanel(QWidget):
+class ActivityPanel(QGroupBox):
 
     def __init__(self):
-        super().__init__()
+        super().__init__("Activity Log")
 
         layout = QVBoxLayout(self)
-
-        layout.addWidget(QLabel("Agent Activity"))
 
         self.log = QTextEdit()
 
         self.log.setReadOnly(True)
 
-        self.log.append("Waiting for incoming orders...")
+        self.log.append("===================================")
+        self.log.append("Restaurant Multi-Agent System")
+        self.log.append("System initialized.")
+        self.log.append("Waiting for new orders...")
+        self.log.append("===================================")
 
         layout.addWidget(self.log)
 
-    def add_log(self, text):
+    def add(self, text):
 
         self.log.append(text)
