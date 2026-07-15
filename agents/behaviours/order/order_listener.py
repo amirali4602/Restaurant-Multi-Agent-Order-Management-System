@@ -1,7 +1,11 @@
 from spade.behaviour import CyclicBehaviour
 from spade.message import Message
 
-from config.settings import CHEF_AGENT_JID
+from config.settings import (
+    CHEF_AGENT_JID,
+    DELIVERY_AGENT_JID,
+)
+
 from messaging.performatives import Performative
 
 from models.order import Order
@@ -20,6 +24,10 @@ class OrderListener(CyclicBehaviour):
             return
 
         performative = msg.get_metadata("performative")
+
+        # -------------------------
+        # Inventory Response
+        # -------------------------
 
         if performative == Performative.INVENTORY_OK.value:
 
@@ -55,17 +63,50 @@ class OrderListener(CyclicBehaviour):
             await self.send(chef_message)
 
             AppLogger.info(
-                f"[{order.order_id}] OrderAgent -> ChefAgent | PREPARE_ORDER"
+                "OrderAgent -> ChefAgent | PREPARE_ORDER"
             )
 
-        elif performative == Performative.ORDER_READY.value:
+        # -------------------------
+        # Chef Response
+        # -------------------------
 
-            order = Order.from_json(msg.body)
+        elif performative == Performative.ORDER_READY.value:
 
             AppLogger.info(
                 "OrderAgent <- ChefAgent | ORDER_READY"
             )
 
+            order = Order.from_json(msg.body)
+
+            delivery_message = Message(
+                to=DELIVERY_AGENT_JID
+            )
+
+            delivery_message.set_metadata(
+                "performative",
+                Performative.REQUEST_DELIVERY.value
+            )
+
+            delivery_message.body = order.to_json()
+
+            await self.send(delivery_message)
+
             AppLogger.info(
-                f"[{order.order_id}] Order completed successfully!"
+                "OrderAgent -> DeliveryAgent | REQUEST_DELIVERY"
+            )
+
+        # -------------------------
+        # Delivery Response
+        # -------------------------
+
+        elif performative == Performative.DELIVERED.value:
+
+            AppLogger.info(
+                "OrderAgent <- DeliveryAgent | DELIVERED"
+            )
+
+            order = Order.from_json(msg.body)
+
+            AppLogger.info(
+                f"[{order.order_id}] Order delivered successfully!"
             )
