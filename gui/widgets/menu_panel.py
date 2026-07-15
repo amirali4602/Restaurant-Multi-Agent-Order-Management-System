@@ -8,6 +8,7 @@ from PySide6.QtWidgets import (
 )
 
 from gui.widgets.quantity_selector import QuantitySelector
+from models.order import Order
 
 
 class MenuPanel(QGroupBox):
@@ -56,3 +57,31 @@ class MenuPanel(QGroupBox):
 
         self.submit_button = QPushButton("Submit Order")
         layout.addWidget(self.submit_button)
+    def create_order(self):
+
+        customer = self.customer_name.text().strip()
+
+        if not customer:
+            return None
+
+        items = {}
+
+        for food, selector in self.items.items():
+
+            quantity = selector.value()
+
+            if quantity > 0:
+                items[food] = quantity
+
+        if not items:
+            return None
+
+        return Order.create(
+            customer=customer,
+            items=items,
+        )
+    def clear_form(self):
+        self.customer_name.clear()
+
+        for selector in self.items.values():
+            selector.setValue(0)

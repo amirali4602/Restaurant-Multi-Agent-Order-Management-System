@@ -25,3 +25,5 @@ class ActivityPanel(QGroupBox):
     def add(self, text):
 
         self.log.append(text)
+    def clear(self):
+        self.log.clear()
