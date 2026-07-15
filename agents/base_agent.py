@@ -1,10 +1,11 @@
 from spade.agent import Agent
 
+from services.logger import AppLogger
+
 
 class BaseAgent(Agent):
 
     async def setup(self):
-        print("=" * 50)
-        print(f"{self.__class__.__name__} connected")
-        print(f"JID: {self.jid}")
-        print("=" * 50)
+        AppLogger.info(
+            f"{self.__class__.__name__} connected ({self.jid})"
+        )

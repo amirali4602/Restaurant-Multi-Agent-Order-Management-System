@@ -90,18 +90,17 @@ restaurant-mas/
 
 ---
 
-## Current Progress
+## Progress
 
-- [x] Project setup
-- [x] Desktop GUI
-- [ ] SPADE infrastructure
-- [ ] Order Agent
-- [ ] Inventory Agent
-- [ ] Chef Agent
-- [ ] Delivery Agent
-- [ ] GUI Integration
-- [ ] Testing
-- [ ] Documentation
+- ✅ Sprint 1 – Project Setup
+- ✅ Sprint 2 – PySide6 GUI
+- ✅ Sprint 3 – GUI Components
+- ✅ Sprint 4 – SPADE & Prosody Setup
+- ✅ Sprint 5 – Order ↔ Inventory Communication
+- ✅ Sprint 6 – Chef Agent Workflow
+- ⏳ Sprint 7 – Delivery Agent
+- ⏳ Sprint 8 – GUI Integration
+- ⏳ Sprint 9 – Final Polish & Documentation
 
 ---
 
