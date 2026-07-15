@@ -15,11 +15,13 @@ from PySide6.QtGui import QIcon
 
 class MainWindow(QMainWindow):
 
-    def __init__(self):
+    def __init__(self, agent_manager):
         super().__init__()
 
+        self.agent_manager = agent_manager
+
         self.setWindowTitle("Restaurant Multi-Agent System")
-        self.setWindowIcon(QIcon("assets/restaurant.png"))
+        self.setWindowIcon(QIcon("assets/restaurant.jpg"))
         self.setMinimumSize(1200,700)
         self.resize(1200,700)
 
@@ -77,17 +79,7 @@ class MainWindow(QMainWindow):
 
             return
 
-        self.activity.add(
-            f"New order received from {order.customer}"
-        )
-
-        self.result.set_status(
-            "Processing"
-        )
-
-        self.monitor.set_order_status(
-            "RUNNING"
-        )
+        self.agent_manager.submit_order(order)
 
         self.statusBar().showMessage(
             f"✅ Order created for {order.customer}"

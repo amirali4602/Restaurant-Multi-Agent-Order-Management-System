@@ -1,7 +1,7 @@
 from PySide6.QtWidgets import QTextEdit
 from PySide6.QtWidgets import QVBoxLayout
 from PySide6.QtWidgets import QGroupBox
-
+from services.event_bus import event_bus
 
 class ActivityPanel(QGroupBox):
 
@@ -21,7 +21,9 @@ class ActivityPanel(QGroupBox):
         self.log.append("===================================")
 
         layout.addWidget(self.log)
-
+        event_bus.activity.connect(
+            self.add
+        )
     def add(self, text):
 
         self.log.append(text)

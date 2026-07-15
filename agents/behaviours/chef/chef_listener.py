@@ -9,7 +9,7 @@ from models.order import Order
 from models.order_status import OrderStatus
 
 from services.logger import AppLogger
-
+from services.notification_service import NotificationService
 
 class ChefListener(CyclicBehaviour):
 
@@ -36,11 +36,14 @@ class ChefListener(CyclicBehaviour):
         )
 
         order.status = OrderStatus.COOKING.value
-
+        NotificationService.chef_cooking()
+        NotificationService.cooking_started()
         await asyncio.sleep(3)
 
         order.status = OrderStatus.READY.value
-
+        NotificationService.chef_ready()
+        NotificationService.cooking_finished()
+        NotificationService.delivery_started()
         AppLogger.info(
             "Cooking finished."
         )

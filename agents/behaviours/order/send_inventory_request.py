@@ -5,7 +5,7 @@ from config.settings import INVENTORY_AGENT_JID
 from messaging.performatives import Performative
 
 from services.logger import AppLogger
-
+from services.notification_service import NotificationService
 
 class SendInventoryRequest(OneShotBehaviour):
 
@@ -17,6 +17,8 @@ class SendInventoryRequest(OneShotBehaviour):
 
     async def run(self):
 
+        NotificationService.order_running()
+        NotificationService.inventory_checking()
         msg = Message(
             to=INVENTORY_AGENT_JID
         )

@@ -7,7 +7,7 @@ from models.order import Order
 from models.order_status import OrderStatus
 
 from services.logger import AppLogger
-
+from services.notification_service import NotificationService
 
 class InventoryListener(CyclicBehaviour):
 
@@ -36,10 +36,13 @@ class InventoryListener(CyclicBehaviour):
         AppLogger.info(
             f"Items: {order.items}"
         )
-
+        NotificationService.inventory_checking()
         # Simulate successful inventory check
         order.status = OrderStatus.INVENTORY_CONFIRMED.value
 
+        NotificationService.inventory_done()
+        NotificationService.chef_cooking()
+        NotificationService.inventory_result()
         reply = Message(
             to=str(msg.sender)
         )
@@ -50,7 +53,6 @@ class InventoryListener(CyclicBehaviour):
         )
 
         reply.body = order.to_json()
-
         await self.send(reply)
 
         AppLogger.info(
