@@ -21,7 +21,7 @@ class MainWindow(QMainWindow):
         self.agent_manager = agent_manager
 
         self.setWindowTitle("Restaurant Multi-Agent System")
-        self.setWindowIcon(QIcon("assets/restaurant.png"))
+        self.setWindowIcon(QIcon("assets/restaurant.jpg"))
         self.setMinimumSize(1200,700)
         self.resize(1200,700)
 
