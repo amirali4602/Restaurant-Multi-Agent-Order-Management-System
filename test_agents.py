@@ -1,5 +1,6 @@
 import asyncio
 
+from agents.chef_agent import ChefAgent
 from agents.order_agent import OrderAgent
 from agents.inventory_agent import InventoryAgent
 
@@ -23,10 +24,16 @@ async def main():
         INVENTORY_AGENT_PASSWORD,
         verify_security=False,
     )
+    chef = ChefAgent(
+        CHEF_AGENT_JID,
+        CHEF_AGENT_PASSWORD,
+        verify_security=False,
+    )
 
     # Start agents first
     await order.start(auto_register=False)
     await inventory.start(auto_register=False)
+    await chef.start(auto_register=False)
 
     print("Agents started.")
 
