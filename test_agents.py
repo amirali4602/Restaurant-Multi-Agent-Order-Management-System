@@ -3,10 +3,12 @@ import asyncio
 from agents.order_agent import OrderAgent
 from agents.inventory_agent import InventoryAgent
 
-from config.settings import *
-import logging
+from agents.behaviours.order.send_inventory_request import (
+    SendInventoryRequest,
+)
 
-# logging.basicConfig(level=logging.DEBUG)
+from config.settings import *
+
 
 async def main():
 
@@ -21,13 +23,31 @@ async def main():
         INVENTORY_AGENT_PASSWORD,
         verify_security=False,
     )
+
+    # Start agents first
     await order.start(auto_register=False)
     await inventory.start(auto_register=False)
 
     print("Agents started.")
 
-    while True:
-        await asyncio.sleep(1)
+    # Give them a moment to finish setup()
+    await asyncio.sleep(2)
+
+    # Now trigger the OneShotBehaviour
+    order.add_behaviour(
+        SendInventoryRequest()
+    )
+
+    try:
+        while True:
+            await asyncio.sleep(1)
+    except KeyboardInterrupt:
+        print("Stopping agents...")
+
+        await order.stop()
+        await inventory.stop()
+
+        print("Agents stopped.")
 
 
 if __name__ == "__main__":
