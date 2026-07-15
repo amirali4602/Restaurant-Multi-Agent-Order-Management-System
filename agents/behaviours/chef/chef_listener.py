@@ -37,12 +37,12 @@ class ChefListener(CyclicBehaviour):
 
         order.status = OrderStatus.COOKING.value
         NotificationService.chef_cooking()
-        NotificationService.cooking_started()
+        NotificationService.cooking_started(order)
         await asyncio.sleep(3)
 
         order.status = OrderStatus.READY.value
         NotificationService.chef_ready()
-        NotificationService.cooking_finished()
+        NotificationService.cooking_finished(order)
         NotificationService.delivery_started()
         AppLogger.info(
             "Cooking finished."

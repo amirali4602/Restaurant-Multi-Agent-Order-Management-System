@@ -1,7 +1,11 @@
 import asyncio
+import random
+from datetime import datetime
 
 from spade.behaviour import CyclicBehaviour
 from spade.message import Message
+
+from database.repository import OrderRepository
 
 from messaging.performatives import Performative
 
@@ -10,6 +14,7 @@ from models.order_status import OrderStatus
 
 from services.logger import AppLogger
 from services.notification_service import NotificationService
+
 
 class DeliveryListener(CyclicBehaviour):
 
@@ -35,21 +40,37 @@ class DeliveryListener(CyclicBehaviour):
             f"[{order.order_id}] Assigning delivery driver..."
         )
 
-        await asyncio.sleep(2)
+        drivers = [
+            "Mike",
+            "Emma",
+            "Alex",
+            "Sophia",
+            "James",
+        ]
 
+        order.driver = random.choice(drivers)
         order.status = OrderStatus.OUT_FOR_DELIVERY.value
+
         NotificationService.delivery_started()
-        NotificationService.delivery_completed_result()
+        NotificationService.delivery_started_result(order)
+
         AppLogger.info(
-            f"[{order.order_id}] Driver assigned."
+            f"[{order.order_id}] Driver assigned: {order.driver}"
         )
 
-        await asyncio.sleep(3)
+        order.delivery_time = random.randint(4, 8)
+
+        await asyncio.sleep(order.delivery_time)
 
         order.status = OrderStatus.DELIVERED.value
+        order.completed_at = datetime.now().isoformat(timespec="seconds")
+
+        OrderRepository.save(order)
+
         NotificationService.delivery_done()
         NotificationService.order_completed()
-        NotificationService.delivery_completed_result()
+        NotificationService.delivery_completed_result(order)
+
         AppLogger.info(
             f"[{order.order_id}] Order delivered."
         )

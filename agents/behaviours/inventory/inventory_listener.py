@@ -42,7 +42,7 @@ class InventoryListener(CyclicBehaviour):
 
         NotificationService.inventory_done()
         NotificationService.chef_cooking()
-        NotificationService.inventory_result()
+        NotificationService.inventory_result(order)
         reply = Message(
             to=str(msg.sender)
         )
