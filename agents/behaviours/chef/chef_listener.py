@@ -1,4 +1,5 @@
 import asyncio
+import random
 
 from spade.behaviour import CyclicBehaviour
 from spade.message import Message
@@ -38,7 +39,9 @@ class ChefListener(CyclicBehaviour):
         order.status = OrderStatus.COOKING.value
         NotificationService.chef_cooking()
         NotificationService.cooking_started(order)
-        await asyncio.sleep(3)
+        order.cooking_time = random.randint(2, 5)
+
+        await asyncio.sleep(order.cooking_time)
 
         order.status = OrderStatus.READY.value
         NotificationService.chef_ready()
