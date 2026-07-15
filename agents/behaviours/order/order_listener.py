@@ -1,10 +1,12 @@
-import json
-
 from spade.behaviour import CyclicBehaviour
 from spade.message import Message
 
 from config.settings import CHEF_AGENT_JID
 from messaging.performatives import Performative
+
+from models.order import Order
+from models.order_status import OrderStatus
+
 from services.logger import AppLogger
 
 
@@ -25,25 +27,19 @@ class OrderListener(CyclicBehaviour):
                 "OrderAgent <- InventoryAgent | INVENTORY_OK"
             )
 
-            response = json.loads(msg.body)
+            order = Order.from_json(msg.body)
 
             AppLogger.info(
-                f"Inventory Status: {response['status']}"
+                f"[{order.order_id}] Inventory Status: {order.status}"
             )
 
-            if response["status"] != "available":
+            if order.status != OrderStatus.INVENTORY_CONFIRMED.value:
+
                 AppLogger.warning(
                     "Inventory unavailable."
                 )
-                return
 
-            order = {
-                "customer": "John",
-                "items": {
-                    "Pizza": 2,
-                    "Drink": 1
-                }
-            }
+                return
 
             chef_message = Message(
                 to=CHEF_AGENT_JID
@@ -54,22 +50,22 @@ class OrderListener(CyclicBehaviour):
                 Performative.PREPARE_ORDER.value
             )
 
-            chef_message.body = json.dumps(order)
+            chef_message.body = order.to_json()
 
             await self.send(chef_message)
 
             AppLogger.info(
-                "OrderAgent -> ChefAgent | PREPARE_ORDER"
+                f"[{order.order_id}] OrderAgent -> ChefAgent | PREPARE_ORDER"
             )
 
         elif performative == Performative.ORDER_READY.value:
 
-            response = json.loads(msg.body)
+            order = Order.from_json(msg.body)
 
             AppLogger.info(
                 "OrderAgent <- ChefAgent | ORDER_READY"
             )
 
             AppLogger.info(
-                "Order completed successfully!"
+                f"[{order.order_id}] Order completed successfully!"
             )

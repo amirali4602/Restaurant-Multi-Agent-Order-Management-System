@@ -1,9 +1,11 @@
-import json
-
 from spade.behaviour import CyclicBehaviour
 from spade.message import Message
 
 from messaging.performatives import Performative
+
+from models.order import Order
+from models.order_status import OrderStatus
+
 from services.logger import AppLogger
 
 
@@ -21,24 +23,22 @@ class InventoryListener(CyclicBehaviour):
         if performative != Performative.CHECK_INVENTORY.value:
             return
 
-        order = json.loads(msg.body)
+        order = Order.from_json(msg.body)
 
         AppLogger.info(
             "InventoryAgent <- OrderAgent | CHECK_INVENTORY"
         )
 
         AppLogger.info(
-            f"Checking inventory for {order['customer']}"
+            f"[{order.order_id}] Checking inventory for {order.customer}"
         )
 
         AppLogger.info(
-            f"Items: {order['items']}"
+            f"Items: {order.items}"
         )
 
-        response = {
-            "status": "available",
-            "message": "Inventory verified"
-        }
+        # Simulate successful inventory check
+        order.status = OrderStatus.INVENTORY_CONFIRMED.value
 
         reply = Message(
             to=str(msg.sender)
@@ -49,7 +49,7 @@ class InventoryListener(CyclicBehaviour):
             Performative.INVENTORY_OK.value
         )
 
-        reply.body = json.dumps(response)
+        reply.body = order.to_json()
 
         await self.send(reply)
 

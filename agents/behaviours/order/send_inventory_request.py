@@ -4,8 +4,8 @@ from spade.message import Message
 from config.settings import INVENTORY_AGENT_JID
 from messaging.performatives import Performative
 
+from models.order import Order
 from services.logger import AppLogger
-import json
 
 class SendInventoryRequest(OneShotBehaviour):
 
@@ -19,17 +19,17 @@ class SendInventoryRequest(OneShotBehaviour):
             "performative",
             Performative.CHECK_INVENTORY.value
         )
-        order = {
-            "customer": "John",
-            "items": {
+        order = Order.create(
+            customer="John",
+            items={
                 "Pizza": 2,
                 "Drink": 1
             }
-        }
-        msg.body = json.dumps(order)
+        )
+        msg.body = order.to_json()
 
         await self.send(msg)
 
         AppLogger.info(
-            "Inventory request sent."
+            f"[{order.order_id}] Inventory request sent."
         )

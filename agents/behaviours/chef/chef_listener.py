@@ -1,10 +1,13 @@
 import asyncio
-import json
 
 from spade.behaviour import CyclicBehaviour
 from spade.message import Message
 
 from messaging.performatives import Performative
+
+from models.order import Order
+from models.order_status import OrderStatus
+
 from services.logger import AppLogger
 
 
@@ -22,17 +25,21 @@ class ChefListener(CyclicBehaviour):
         if performative != Performative.PREPARE_ORDER.value:
             return
 
-        order = json.loads(msg.body)
+        order = Order.from_json(msg.body)
 
         AppLogger.info(
             "ChefAgent <- OrderAgent | PREPARE_ORDER"
         )
 
         AppLogger.info(
-            f"Preparing order for {order['customer']}"
+            f"[{order.order_id}] Preparing order for {order.customer}"
         )
 
+        order.status = OrderStatus.COOKING.value
+
         await asyncio.sleep(3)
+
+        order.status = OrderStatus.READY.value
 
         AppLogger.info(
             "Cooking finished."
@@ -47,9 +54,7 @@ class ChefListener(CyclicBehaviour):
             Performative.ORDER_READY.value
         )
 
-        reply.body = json.dumps({
-            "status": "ready"
-        })
+        reply.body = order.to_json()
 
         await self.send(reply)
 
