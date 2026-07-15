@@ -1,8 +1,9 @@
 import asyncio
 
-from agents.chef_agent import ChefAgent
 from agents.order_agent import OrderAgent
 from agents.inventory_agent import InventoryAgent
+from agents.chef_agent import ChefAgent
+from agents.delivery_agent import DeliveryAgent
 
 from agents.behaviours.order.send_inventory_request import (
     SendInventoryRequest,
@@ -24,23 +25,31 @@ async def main():
         INVENTORY_AGENT_PASSWORD,
         verify_security=False,
     )
+
     chef = ChefAgent(
         CHEF_AGENT_JID,
         CHEF_AGENT_PASSWORD,
         verify_security=False,
     )
 
-    # Start agents first
+    delivery = DeliveryAgent(
+        DELIVERY_AGENT_JID,
+        DELIVERY_AGENT_PASSWORD,
+        verify_security=False,
+    )
+
+    # Start agents
     await order.start(auto_register=False)
     await inventory.start(auto_register=False)
     await chef.start(auto_register=False)
+    await delivery.start(auto_register=False)
 
     print("Agents started.")
 
-    # Give them a moment to finish setup()
+    # Wait until all agents are ready
     await asyncio.sleep(2)
 
-    # Now trigger the OneShotBehaviour
+    # Trigger workflow
     order.add_behaviour(
         SendInventoryRequest()
     )
@@ -48,11 +57,15 @@ async def main():
     try:
         while True:
             await asyncio.sleep(1)
+
     except KeyboardInterrupt:
-        print("Stopping agents...")
+
+        print("\nStopping agents...")
 
         await order.stop()
         await inventory.stop()
+        await chef.stop()
+        await delivery.stop()
 
         print("Agents stopped.")
 
