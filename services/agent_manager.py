@@ -53,7 +53,6 @@ class AgentManager:
         await self.inventory_agent.start(auto_register=False)
         await self.chef_agent.start(auto_register=False)
         await self.delivery_agent.start(auto_register=False)
-
     def _run_loop(self):
 
         self.loop = asyncio.new_event_loop()

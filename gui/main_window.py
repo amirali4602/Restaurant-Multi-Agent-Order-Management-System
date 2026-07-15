@@ -79,18 +79,8 @@ class MainWindow(QMainWindow):
 
             return
 
-        self.activity.add(
-            f"New order received from {order.customer}"
-        )
-
-        self.result.set_status(
-            "Processing"
-        )
-
-        self.monitor.set_order_status(
-            "RUNNING"
-        )
         self.agent_manager.submit_order(order)
+
         self.statusBar().showMessage(
             f"✅ Order created for {order.customer}"
         )

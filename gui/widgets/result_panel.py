@@ -2,6 +2,8 @@ from PySide6.QtWidgets import QLabel
 from PySide6.QtWidgets import QGroupBox
 from PySide6.QtWidgets import QFormLayout
 
+from services.event_bus import event_bus
+
 
 class ResultPanel(QGroupBox):
 
@@ -11,36 +13,44 @@ class ResultPanel(QGroupBox):
         layout = QFormLayout(self)
 
         self.status = QLabel("Waiting")
-
         self.driver = QLabel("-")
-
         self.cooking = QLabel("-")
-
         self.delivery = QLabel("-")
 
         layout.addRow("Order Status :", self.status)
         layout.addRow("Assigned Driver :", self.driver)
         layout.addRow("Cooking Time :", self.cooking)
         layout.addRow("Delivery ETA :", self.delivery)
-    def set_status(self, text):
-        self.status.setText(text)
 
+        event_bus.result.connect(
+            self.update_result
+        )
 
-    def set_driver(self, text):
-        self.driver.setText(text)
+    def update_result(self, data):
 
+        self.status.setText(
+            data.get("status", "Waiting")
+        )
 
-    def set_cooking_time(self, text):
-        self.cooking.setText(text)
+        self.driver.setText(
+            data.get("driver", "-")
+        )
 
+        self.cooking.setText(
+            data.get("cooking", "-")
+        )
 
-    def set_delivery_eta(self, text):
-        self.delivery.setText(text)
-
+        self.delivery.setText(
+            data.get("eta", "-")
+        )
 
     def reset(self):
 
-        self.set_status("Waiting")
-        self.set_driver("-")
-        self.set_cooking_time("-")
-        self.set_delivery_eta("-")
+        self.update_result(
+            {
+                "status": "Waiting",
+                "driver": "-",
+                "cooking": "-",
+                "eta": "-",
+            }
+        )
