@@ -1,16 +1,25 @@
 import sys
-from gui.styles import APP_STYLE
+
 from PySide6.QtWidgets import QApplication
 
+from gui.styles import APP_STYLE
 from gui.main_window import MainWindow
+
+from services.agent_manager import AgentManager
 
 
 def main():
+
     app = QApplication(sys.argv)
 
     app.setStyleSheet(APP_STYLE)
 
-    window = MainWindow()
+    # Start the Multi-Agent System
+    manager = AgentManager()
+    manager.start()
+
+    # Create the GUI
+    window = MainWindow(manager)
     window.show()
 
     sys.exit(app.exec())
