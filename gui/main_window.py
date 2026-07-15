@@ -62,3 +62,35 @@ class MainWindow(QMainWindow):
 
         root.addWidget(self.result)
         self.statusBar().showMessage("🟢 System Ready")
+        self.menu.submit_button.clicked.connect(
+            self.submit_order
+        )
+    def submit_order(self):
+
+        order = self.menu.create_order()
+
+        if order is None:
+
+            self.statusBar().showMessage(
+                "❌ Enter customer name and select at least one item."
+            )
+
+            return
+
+        self.activity.add(
+            f"New order received from {order.customer}"
+        )
+
+        self.result.set_status(
+            "Processing"
+        )
+
+        self.monitor.set_order_status(
+            "RUNNING"
+        )
+
+        self.statusBar().showMessage(
+            f"✅ Order created for {order.customer}"
+        )
+
+        self.menu.clear_form()

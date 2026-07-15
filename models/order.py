@@ -41,10 +41,12 @@ class Order:
             status=data["status"],
         )
     def __str__(self):
+
         return (
             f"Order("
             f"id={self.order_id}, "
-            f"customer={self.customer}, "
-            f"status={self.status}, "
-            f"items={self.items})"
+            f"customer='{self.customer}', "
+            f"items={self.items}, "
+            f"status={self.status}"
+            f")"
         )

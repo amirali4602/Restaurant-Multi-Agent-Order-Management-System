@@ -3,10 +3,11 @@ from PySide6.QtWidgets import QWidget, QPushButton, QLabel, QHBoxLayout
 
 
 class QuantitySelector(QWidget):
+
     def __init__(self):
         super().__init__()
 
-        self.value = 0
+        self._value = 0
 
         layout = QHBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
@@ -28,23 +29,32 @@ class QuantitySelector(QWidget):
 
         self.minus_btn.clicked.connect(self.decrease)
         self.plus_btn.clicked.connect(self.increase)
+
         self.minus_btn.setObjectName("quantityButton")
         self.plus_btn.setObjectName("quantityButton")
-
         self.label.setObjectName("quantityLabel")
+
     def increase(self):
-        if self.value < 20:
-            self.value += 1
-            self.label.setText(str(self.value))
+
+        if self._value < 20:
+
+            self._value += 1
+            self.label.setText(str(self._value))
 
     def decrease(self):
-        if self.value > 0:
-            self.value -= 1
-            self.label.setText(str(self.value))
 
-    def get_value(self):
-        return self.value
+        if self._value > 0:
+
+            self._value -= 1
+            self.label.setText(str(self._value))
+
+    def value(self):
+        return self._value
+
+    def setValue(self, value):
+
+        self._value = max(0, min(20, value))
+        self.label.setText(str(self._value))
 
     def reset(self):
-        self.value = 0
-        self.label.setText("0")
+        self.setValue(0)
