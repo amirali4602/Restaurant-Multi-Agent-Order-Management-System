@@ -8,8 +8,6 @@ The application simulates how independent software agents collaborate to process
 
 ## 📸 Screenshots
 
-> Add screenshots here after finishing the UI.
-
 ### Dashboard
 
 ![Dashboard](assets/screenshots/dashboard.png)
@@ -20,6 +18,14 @@ The application simulates how independent software agents collaborate to process
 
 ---
 
+## 📹 Video
+
+### Demo
+
+![Demo](assets/video/demo.gif)
+
+
+---
 # ✨ Features
 
 ## 🤖 Multi-Agent Architecture
