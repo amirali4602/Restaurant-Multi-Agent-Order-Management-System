@@ -14,6 +14,8 @@ from PySide6.QtWidgets import (
 from PySide6.QtWidgets import QGridLayout
 from gui.widgets.stat_card import StatCard
 from database.repository import OrderRepository
+from PySide6.QtGui import QIcon
+from PySide6.QtGui import QShortcut, QKeySequence
 
 
 class HistoryWindow(QDialog):
@@ -22,6 +24,7 @@ class HistoryWindow(QDialog):
         super().__init__()
 
         self.setWindowTitle("Order History")
+        self.setWindowIcon(QIcon("assets/restaurant.jpg"))
         self.resize(1300, 750)
 
         layout = QVBoxLayout(self)
@@ -112,6 +115,14 @@ class HistoryWindow(QDialog):
 
         self.load_orders()
         self.load_statistics()
+        self.fullscreen_shortcut = QShortcut(
+            QKeySequence("F11"),
+            self,
+        )
+
+        self.fullscreen_shortcut.activated.connect(
+            self.toggle_fullscreen
+        )
 
     def load_orders(self):
 
@@ -226,3 +237,11 @@ class HistoryWindow(QDialog):
         self.top_item.set_value(
             stats["most_ordered_item"]
         )
+
+    def toggle_fullscreen(self):
+
+        if self.isFullScreen():
+            self.showNormal()
+            self.showMaximized()
+        else:
+            self.showFullScreen()

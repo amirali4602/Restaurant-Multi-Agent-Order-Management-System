@@ -1,6 +1,6 @@
 QPushButton {
 
-    background: #F57C00;
+    background: #EA580C;
 
     color: white;
 
@@ -16,12 +16,12 @@ QPushButton {
 
 QPushButton:hover {
 
-    background: #EF6C00;
+    background: #F97316;
 }
 
 QPushButton:pressed {
 
-    background: #D84315;
+    background: #C2410C;
 }
 
 QPushButton#quantityButton {

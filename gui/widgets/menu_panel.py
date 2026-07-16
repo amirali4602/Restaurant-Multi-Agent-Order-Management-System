@@ -17,14 +17,12 @@ class MenuPanel(QGroupBox):
         super().__init__("Place Order")
 
         layout = QVBoxLayout(self)
-
         layout.addWidget(QLabel("Customer Name"))
 
         self.customer_name = QLineEdit()
         self.customer_name.setPlaceholderText("Enter customer name")
         layout.addWidget(self.customer_name)
 
-        layout.addSpacing(10)
 
         layout.addWidget(QLabel("Menu"))
 

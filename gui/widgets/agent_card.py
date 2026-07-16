@@ -39,7 +39,8 @@ class AgentCard(QFrame):
 
         layout.addWidget(self.title)
         layout.addWidget(self.status)
-
+        self.setMinimumHeight(70)
+        self.setMaximumHeight(80)
         self.set_status("IDLE")
 
     def set_status(self, status):

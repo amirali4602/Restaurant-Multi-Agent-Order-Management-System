@@ -7,7 +7,7 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
-
+from PySide6.QtGui import QShortcut, QKeySequence
 from gui.history_window import HistoryWindow
 from gui.widgets.activity_panel import ActivityPanel
 from gui.widgets.agent_monitor import AgentMonitor
@@ -39,6 +39,8 @@ class MainWindow(QMainWindow):
         self.menu = MenuPanel()
         self.monitor = AgentMonitor()
         self.activity = ActivityPanel()
+        self.activity.setMinimumHeight(180)
+        self.activity.setMaximumHeight(250)
         self.result = ResultPanel()
 
         left.addWidget(self.menu)
@@ -68,6 +70,14 @@ class MainWindow(QMainWindow):
         self.menu.history_button.clicked.connect(
             self.show_history
         )
+        self.fullscreen_shortcut = QShortcut(
+            QKeySequence("F11"),
+            self,
+        )
+
+        self.fullscreen_shortcut.activated.connect(
+            self.toggle_fullscreen
+        )
 
     def submit_order(self):
 
@@ -94,3 +104,10 @@ class MainWindow(QMainWindow):
         dialog = HistoryWindow()
 
         dialog.exec()
+    def toggle_fullscreen(self):
+
+        if self.isFullScreen():
+            self.showNormal()
+            self.showMaximized()
+        else:
+            self.showFullScreen()

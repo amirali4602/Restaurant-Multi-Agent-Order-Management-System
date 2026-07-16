@@ -1,28 +1,12 @@
-#statCard {
-
-    background: #FFF4E6;
-
-    border: 1px solid #E6E6E6;
-
-    border-radius: 14px;
-
-    padding: 14px;
+#statCard,
+#agentCard {
+    background: #27272A;
+    border: 1px solid #3F3F46;
+    border-radius: 12px;
 }
-
 #statCard:hover {
 
     border: 2px solid #F57C00;
-}
-
-#agentCard {
-
-    background: #FFF8F1;
-
-    border: 1px solid #E6E6E6;
-
-    border-radius: 14px;
-
-    padding: 16px;
 }
 
 #agentCard:hover {

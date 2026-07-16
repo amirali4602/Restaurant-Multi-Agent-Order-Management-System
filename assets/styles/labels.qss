@@ -1,6 +1,10 @@
 QLabel {
-    color: #2D3748;
-    font-size: 14px;
+    color: #F4F4F5;
+    background: transparent;
+}
+
+QGroupBox QLabel {
+    color: #F4F4F5;
 }
 
 QLabel#appTitle {
@@ -9,25 +13,29 @@ QLabel#appTitle {
     font-weight: bold;
     padding: 14px;
 }
-
-#agentTitle,
 #statTitle {
-    color: #777777;
+    color: #A1A1AA;
+    font-size: 11pt;
+    font-weight: 600;
+}
+
+#statValue {
+    color: #FB923C;
+    font-size: 22pt;
+    font-weight: bold;
+}
+
+#agentTitle {
+    color: #F4F4F5;
     font-size: 11pt;
     font-weight: bold;
 }
 
 #agentStatus {
+    color: #22C55E;
     font-size: 18pt;
     font-weight: bold;
 }
-
-#statValue {
-    font-size: 24pt;
-    font-weight: bold;
-    color: #F57C00;
-}
-
 QLabel#quantityLabel {
     font-size: 16px;
     font-weight: bold;
