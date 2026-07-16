@@ -134,4 +134,44 @@ QLabel#appTitle {
     font-weight: bold;
     padding: 10px;
 }
+#statCard {
+    border: 1px solid #bdbdbd;
+    border-radius: 10px;
+    background: white;
+    padding: 12px;
+}
+
+#statTitle {
+    font-size: 11pt;
+    color: #666;
+    font-weight: bold;
+}
+
+#statValue {
+    font-size: 22pt;
+    font-weight: bold;
+    color: #1565C0;
+}
+#statCard {
+    border: 1px solid #cfcfcf;
+    border-radius: 12px;
+    background: white;
+    padding: 12px;
+}
+
+#statCard:hover {
+    border: 2px solid #1565C0;
+}
+
+#statTitle {
+    font-size: 11pt;
+    color: #666666;
+    font-weight: bold;
+}
+
+#statValue {
+    font-size: 22pt;
+    font-weight: bold;
+    color: #1565C0;
+}
 """

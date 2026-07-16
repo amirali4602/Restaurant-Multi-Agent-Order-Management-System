@@ -11,7 +11,8 @@ from PySide6.QtWidgets import (
     QTableWidgetItem,
     QVBoxLayout,
 )
-
+from PySide6.QtWidgets import QGridLayout
+from gui.widgets.stat_card import StatCard
 from database.repository import OrderRepository
 
 
@@ -21,7 +22,7 @@ class HistoryWindow(QDialog):
         super().__init__()
 
         self.setWindowTitle("Order History")
-        self.resize(1100, 700)
+        self.resize(1300, 750)
 
         layout = QVBoxLayout(self)
 
@@ -31,6 +32,7 @@ class HistoryWindow(QDialog):
         self.search.setPlaceholderText(
             "Type customer name..."
         )
+
         layout.addWidget(self.search)
 
         self.table = QTableWidget()
@@ -53,44 +55,55 @@ class HistoryWindow(QDialog):
 
         layout.addWidget(self.table)
 
-        # ---------- Statistics ----------
-        stats_box = QGroupBox("Statistics")
+        # ---------------- Statistics ----------------
 
-        stats_layout = QFormLayout(stats_box)
+        stats_box = QGroupBox("Restaurant Statistics")
 
-        self.total_orders = QLabel("-")
-        self.avg_cooking = QLabel("-")
-        self.avg_delivery = QLabel("-")
-        self.top_customer = QLabel("-")
-        self.top_item = QLabel("-")
+        stats_layout = QGridLayout(stats_box)
 
-        stats_layout.addRow(
-            "Total Orders:",
+        self.total_orders = StatCard("Total Orders")
+        self.delivered_orders = StatCard("Delivered Orders")
+        self.cancelled_orders = StatCard("Cancelled Orders")
+
+        self.success_rate = StatCard("Success Rate")
+        self.avg_cooking = StatCard("Avg Cooking")
+        self.avg_delivery = StatCard("Avg Delivery")
+
+        self.inventory_failures = StatCard("Inventory Failures")
+        self.chef_failures = StatCard("Chef Failures")
+        self.delivery_failures = StatCard("Delivery Failures")
+
+        self.top_customer = StatCard("Top Customer")
+        self.top_item = StatCard("Most Ordered Item")
+
+        cards = [
             self.total_orders,
-        )
-
-        stats_layout.addRow(
-            "Average Cooking Time:",
+            self.delivered_orders,
+            self.cancelled_orders,
+            self.success_rate,
             self.avg_cooking,
-        )
-
-        stats_layout.addRow(
-            "Average Delivery Time:",
             self.avg_delivery,
-        )
-
-        stats_layout.addRow(
-            "Top Customer:",
+            self.inventory_failures,
+            self.chef_failures,
+            self.delivery_failures,
             self.top_customer,
-        )
-
-        stats_layout.addRow(
-            "Most Ordered Item:",
             self.top_item,
-        )
+        ]
+
+        columns = 6
+
+        for index, card in enumerate(cards):
+
+            row = index // columns
+            column = index % columns
+
+            stats_layout.addWidget(
+                card,
+                row,
+                column,
+            )
 
         layout.addWidget(stats_box)
-
         self.orders = []
 
         self.search.textChanged.connect(
@@ -98,7 +111,6 @@ class HistoryWindow(QDialog):
         )
 
         self.load_orders()
-
         self.load_statistics()
 
     def load_orders(self):
@@ -107,12 +119,11 @@ class HistoryWindow(QDialog):
 
         keyword = self.search.text().lower().strip()
 
-        filtered = []
-
-        for order in self.orders:
-
-            if keyword in order["customer"].lower():
-                filtered.append(order)
+        filtered = [
+            order
+            for order in self.orders
+            if keyword in order["customer"].lower()
+        ]
 
         headers = [
             "Order ID",
@@ -122,6 +133,8 @@ class HistoryWindow(QDialog):
             "Driver",
             "Cooking (s)",
             "Delivery (s)",
+            "Failure Stage",
+            "Failure Reason",
             "Created",
             "Completed",
         ]
@@ -138,8 +151,10 @@ class HistoryWindow(QDialog):
                 order["items"],
                 order["status"],
                 order["driver"] or "-",
-                str(order["cooking_time"] or "-"),
-                str(order["delivery_time"] or "-"),
+                order["cooking_time"] or "-",
+                order["delivery_time"] or "-",
+                order["failure_stage"] or "-",
+                order["failure_reason"] or "-",
                 order["created_at"] or "-",
                 order["completed_at"] or "-",
             ]
@@ -168,22 +183,46 @@ class HistoryWindow(QDialog):
 
         stats = OrderRepository.get_statistics()
 
-        self.total_orders.setText(
-            str(stats["total"])
+        self.total_orders.set_value(
+            stats["total"]
         )
 
-        self.avg_cooking.setText(
+        self.delivered_orders.set_value(
+            stats["delivered"]
+        )
+
+        self.cancelled_orders.set_value(
+            stats["cancelled"]
+        )
+
+        self.success_rate.set_value(
+            f'{stats["success_rate"]}%'
+        )
+
+        self.inventory_failures.set_value(
+            stats["inventory_failures"]
+        )
+
+        self.chef_failures.set_value(
+            stats["chef_failures"]
+        )
+
+        self.delivery_failures.set_value(
+            stats["delivery_failures"]
+        )
+
+        self.avg_cooking.set_value(
             f'{stats["avg_cooking"]} sec'
         )
 
-        self.avg_delivery.setText(
+        self.avg_delivery.set_value(
             f'{stats["avg_delivery"]} sec'
         )
 
-        self.top_customer.setText(
+        self.top_customer.set_value(
             stats["top_customer"]
         )
 
-        self.top_item.setText(
+        self.top_item.set_value(
             stats["most_ordered_item"]
         )
