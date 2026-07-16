@@ -16,3 +16,5 @@ class OrderStatus(Enum):
     OUT_FOR_DELIVERY = "OUT_FOR_DELIVERY"
 
     DELIVERED = "DELIVERED"
+
+    CANCELLED = "CANCELLED"

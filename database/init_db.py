@@ -13,23 +13,22 @@ def initialize_database():
         (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
 
-            order_id TEXT NOT NULL,
+            order_id TEXT,
+            customer TEXT,
+            items TEXT,
 
-            customer TEXT NOT NULL,
-
-            items TEXT NOT NULL,
-
-            status TEXT NOT NULL,
+            status TEXT,
 
             driver TEXT,
 
             cooking_time INTEGER,
-
             delivery_time INTEGER,
 
             created_at TEXT,
+            completed_at TEXT,
 
-            completed_at TEXT
+            failure_stage TEXT,
+            failure_reason TEXT
         )
         """
     )

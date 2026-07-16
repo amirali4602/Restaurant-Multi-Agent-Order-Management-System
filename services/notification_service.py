@@ -94,3 +94,15 @@ class NotificationService:
                 "eta": "Completed",
             }
         )
+
+    @staticmethod
+    def order_failed(order):
+
+        event_bus.result.emit(
+            {
+                "status": f"❌ {order.failure_stage} Failed",
+                "driver": "-",
+                "cooking": "-",
+                "eta": order.failure_reason,
+            }
+        )
