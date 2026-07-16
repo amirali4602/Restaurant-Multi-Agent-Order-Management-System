@@ -2,12 +2,19 @@ QGroupBox {
     background: #27272A;
     color: #F4F4F5;   /* Title color */
     border: 1px solid #3F3F46;
-    border-radius: 12px;
+    border-radius: 16px;
+
+    margin-top: 14px;
+
+    padding: 16px;
+
+    font-size: 16px;
+    font-weight: bold;
 }
 
 QGroupBox::title {
 
-    color: #2D3748;
+    color: #F4F4F5;
 
     subcontrol-origin: margin;
     subcontrol-position: top left;
@@ -15,6 +22,6 @@ QGroupBox::title {
     left: 12px;
     padding: 0 6px;
 
-    font-size: 16px;
+    font-size: 24;
     font-weight: bold;
 }
