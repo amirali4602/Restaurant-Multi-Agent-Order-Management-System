@@ -2,8 +2,9 @@ name: Build and Release Desktop App
 
 on:
   push:
-    branches:
-      - main
+    tags:
+      - "v*"
+
 permissions:
   contents: write
 
