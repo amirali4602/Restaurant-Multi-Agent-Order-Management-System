@@ -1,28 +1,44 @@
-# 🍽 Restaurant Multi-Agent Order Management System
+# 🍔 Restaurant Multi-Agent Order Management System
 
-A desktop-based Multi-Agent System (MAS) developed with **Python**, **SPADE**, and **PySide6**.
+A desktop-based **Restaurant Order Management System** built with **Python**, **SPADE (XMPP Multi-Agent System)**, **PySide6**, and **SQLite**.
 
-This project simulates a restaurant order workflow where multiple intelligent agents collaborate to process customer orders.
-
----
-
-## Technologies
-
-- Python 3.12+
-- SPADE
-- PySide6 (Qt)
-- XMPP (Prosody)
-- Git
+The application simulates how independent software agents collaborate to process restaurant orders from creation to delivery while providing a modern desktop dashboard for monitoring the entire workflow.
 
 ---
 
-## Project Architecture
+## 📸 Screenshots
 
-```
+> Add screenshots here after finishing the UI.
+
+### Dashboard
+
+![Dashboard](assets/screenshots/dashboard.png)
+
+### Order History
+
+![History](assets/screenshots/history.png)
+
+---
+
+# ✨ Features
+
+## 🤖 Multi-Agent Architecture
+
+The system is composed of four autonomous SPADE agents.
+
+- 🧾 Order Agent
+- 📦 Inventory Agent
+- 👨‍🍳 Chef Agent
+- 🚚 Delivery Agent
+
+Each agent has its own responsibility and communicates exclusively through XMPP messages.
+
+---
+
+## 🍕 Order Processing Workflow
+
+```text
 Customer
-    │
-    ▼
-PySide6 GUI
     │
     ▼
 Order Agent
@@ -35,81 +51,331 @@ Chef Agent
     │
     ▼
 Delivery Agent
+    │
+    ▼
+Delivered / Failed
 ```
 
-Each agent has an independent responsibility and communicates through SPADE messages over an XMPP server.
+Each order progresses through realistic restaurant stages.
 
 ---
 
-## Agents
+## ⚡ Agent Communication
 
-### Order Agent
+Agents communicate using SPADE messages with custom performatives.
 
-- Receives customer orders
-- Creates order IDs
-- Starts the workflow
+Examples include:
 
-### Inventory Agent
-
-- Checks ingredient availability
-- Reserves inventory
-- Sends inventory status
-
-### Chef Agent
-
-- Simulates food preparation
-- Calculates cooking time
-- Marks orders as ready
-
-### Delivery Agent
-
-- Assigns a delivery driver
-- Estimates delivery time
-- Completes the order
+- CHECK_INVENTORY
+- INVENTORY_OK
+- PREPARE_ORDER
+- ORDER_READY
+- REQUEST_DELIVERY
+- DELIVERED
 
 ---
 
-## Project Structure
+## 🎲 Realistic Simulation
+
+Every order behaves differently.
+
+### Cooking Time
+
+Randomized
 
 ```
-restaurant-mas/
+2–5 seconds
+```
 
+### Delivery Time
+
+Randomized
+
+```
+4–8 seconds
+```
+
+### Driver Assignment
+
+Random delivery driver selected for every order.
+
+Example:
+
+- Mike
+- Emma
+- James
+- Sophia
+- Alex
+
+---
+
+## ❌ Failure Simulation
+
+The system can simulate real restaurant failures.
+
+Examples include
+
+- Inventory unavailable
+- Chef unavailable
+- Delivery failure
+
+Cancelled orders include a stored failure reason.
+
+---
+
+# 🖥 Desktop Dashboard
+
+The PySide6 desktop interface includes:
+
+- 🍔 Order creation form
+- 🤖 Live agent monitor
+- 📜 Activity log
+- 📊 Result panel
+- 📈 Statistics dashboard
+- 📚 Order history
+
+Everything updates live through Qt signals.
+
+---
+
+# 📊 Statistics
+
+The History window automatically calculates:
+
+- Total Orders
+- Delivered Orders
+- Cancelled Orders
+- Success Rate
+- Inventory Failures
+- Chef Failures
+- Delivery Failures
+- Average Cooking Time
+- Average Delivery Time
+- Top Customer
+- Most Ordered Menu Item
+
+---
+
+# 📚 Order History
+
+Every completed or cancelled order is stored inside SQLite.
+
+Stored information includes:
+
+- Order ID
+- Customer
+- Items
+- Status
+- Failure Reason
+- Assigned Driver
+- Cooking Time
+- Delivery Time
+- Created Time
+- Completed Time
+
+Orders can be searched by customer name.
+
+---
+
+# 🗄 Database
+
+SQLite is used for persistent storage.
+
+Example schema:
+
+```sql
+orders
+------
+id
+order_id
+customer
+items
+status
+failure_reason
+driver
+cooking_time
+delivery_time
+created_at
+completed_at
+```
+
+---
+
+# 🧠 Technologies
+
+| Technology | Purpose |
+|------------|---------|
+| Python 3 | Programming Language |
+| SPADE | Multi-Agent Framework |
+| XMPP | Agent Communication |
+| PySide6 | Desktop GUI |
+| SQLite | Database |
+| Qt Style Sheets (QSS) | UI Styling |
+
+---
+
+# 📂 Project Structure
+
+```text
+Restaurant-Multi-Agent-Order-Management-System
+│
 ├── agents/
+│   ├── behaviours/
+│   ├── base_agent.py
+│   ├── chef_agent.py
+│   ├── delivery_agent.py
+│   ├── inventory_agent.py
+│   └── order_agent.py
+│
+├── assets/
+│   ├── restaurant.jpg
+│   └── styles/
+│
 ├── config/
-├── data/
+│
+├── database/
+│   ├── connection.py
+│   ├── init_db.py
+│   └── repository.py
+│
 ├── gui/
+│   ├── widgets/
+│   ├── history_window.py
+│   ├── main_window.py
+│   └── style_loader.py
+│
 ├── messaging/
+│
 ├── models/
+│
 ├── services/
-├── tests/
-
+│
 ├── main.py
-├── requirements.txt
+│
 └── README.md
 ```
 
 ---
 
-## Progress
+# 🚀 Installation
 
-- ✅ Sprint 1 – Project Setup
-- ✅ Sprint 2 – PySide6 GUI
-- ✅ Sprint 3 – GUI Components
-- ✅ Sprint 4 – SPADE & Prosody Setup
-- ✅ Sprint 5 – Order ↔ Inventory Communication
-- ✅ Sprint 6 – Chef Agent Workflow
-- ⏳ Sprint 7 – Delivery Agent
-- ⏳ Sprint 8 – GUI Integration
-- ⏳ Sprint 9 – Final Polish & Documentation
+## Clone the repository
+
+```bash
+git clone https://github.com/yourusername/Restaurant-Multi-Agent-Order-Management-System.git
+
+cd Restaurant-Multi-Agent-Order-Management-System
+```
 
 ---
 
-## Screenshots
+## Create virtual environment
 
-Coming soon.
+```bash
+python -m venv .venv
+```
+
+Windows
+
+```bash
+.venv\Scripts\activate
+```
+
+Linux / macOS
+
+```bash
+source .venv/bin/activate
+```
 
 ---
 
-## Author
+## Install dependencies
 
-Amirali Mhdypr
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+## Initialize the database
+
+```bash
+python database/init_db.py
+```
+
+---
+
+## Start XMPP Server
+
+Run your local Prosody server.
+
+Default agents:
+
+```text
+order@localhost
+
+inventory@localhost
+
+chef@localhost
+
+delivery@localhost
+```
+
+---
+
+## Run the application
+
+```bash
+python main.py
+```
+
+---
+
+# 🎯 Learning Objectives
+
+This project demonstrates practical knowledge of:
+
+- Multi-Agent Systems
+- Agent Communication
+- Distributed System Design
+- Event-Driven Programming
+- Desktop Application Development
+- GUI Design
+- SQLite Integration
+- Object-Oriented Programming
+- Software Architecture
+- Message Passing
+
+---
+
+# 📈 Future Improvements
+
+- Export history to CSV
+- Order details window
+- Charts and analytics
+- Agent queue visualization
+- Multiple delivery drivers
+- Menu management
+- Theme switcher
+- Docker support
+- Automated tests
+
+---
+
+# 👨‍💻 Author
+
+**Amirali Mehdipour**
+
+Master's Student in Artificial Intelligence
+
+GitHub:
+https://github.com/amirali4602
+
+Linkedin:
+linkedin.com/in/amirali-mehdipour
+
+---
+
+# 📄 License
+
+This project is licensed under the MIT License.

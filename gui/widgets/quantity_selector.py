@@ -11,7 +11,7 @@ class QuantitySelector(QWidget):
 
         layout = QHBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
-        layout.setSpacing(6)
+        layout.setSpacing(4)
 
         self.minus_btn = QPushButton("−")
         self.plus_btn = QPushButton("+")
@@ -21,7 +21,7 @@ class QuantitySelector(QWidget):
 
         self.label = QLabel("0")
         self.label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.label.setFixedWidth(35)
+        self.label.setFixedWidth(25)
 
         layout.addWidget(self.minus_btn)
         layout.addWidget(self.label)

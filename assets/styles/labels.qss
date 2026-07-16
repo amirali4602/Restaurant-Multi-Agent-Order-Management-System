@@ -1,0 +1,42 @@
+QLabel {
+    color: #F4F4F5;
+    background: transparent;
+}
+
+QGroupBox QLabel {
+    color: #F4F4F5;
+}
+
+QLabel#appTitle {
+    color: #D35400;
+    font-size: 28px;
+    font-weight: bold;
+    padding: 14px;
+}
+#statTitle {
+    color: #A1A1AA;
+    font-size: 11pt;
+    font-weight: 600;
+}
+
+#statValue {
+    color: #FB923C;
+    font-size: 22pt;
+    font-weight: bold;
+}
+
+#agentTitle {
+    color: #F4F4F5;
+    font-size: 11pt;
+    font-weight: bold;
+}
+
+#agentStatus {
+    color: #22C55E;
+    font-size: 18pt;
+    font-weight: bold;
+}
+QLabel#quantityLabel {
+    font-size: 16px;
+    font-weight: bold;
+}

@@ -19,10 +19,10 @@ class NotificationService:
     def inventory_done():
         event_bus.inventory_status.emit("DONE")
 
-
     @staticmethod
     def chef_cooking():
         event_bus.chef_status.emit("COOKING")
+
     @staticmethod
     def chef_ready():
         event_bus.chef_status.emit("READY")
@@ -34,8 +34,9 @@ class NotificationService:
     @staticmethod
     def delivery_done():
         event_bus.delivery_status.emit("DELIVERED")
+
     @staticmethod
-    def inventory_result():
+    def inventory_result(order):
 
         event_bus.result.emit(
             {
@@ -47,7 +48,7 @@ class NotificationService:
         )
 
     @staticmethod
-    def cooking_started():
+    def cooking_started(order):
 
         event_bus.result.emit(
             {
@@ -59,37 +60,49 @@ class NotificationService:
         )
 
     @staticmethod
-    def cooking_finished():
+    def cooking_finished(order):
 
         event_bus.result.emit(
             {
                 "status": "Ready",
                 "driver": "-",
-                "cooking": "3 sec",
+                "cooking": f"{order.cooking_time} sec",
                 "eta": "-",
             }
         )
 
     @staticmethod
-    def delivery_started_result():
+    def delivery_started_result(order):
 
         event_bus.result.emit(
             {
                 "status": "Out for Delivery",
-                "driver": "Driver #1",
-                "cooking": "3 sec",
-                "eta": "5 sec",
+                "driver": order.driver,
+                "cooking": f"{order.cooking_time} sec",
+                "eta": f"{order.delivery_time} sec",
             }
         )
 
     @staticmethod
-    def delivery_completed_result():
+    def delivery_completed_result(order):
 
         event_bus.result.emit(
             {
                 "status": "Delivered ✅",
-                "driver": "Driver #1",
-                "cooking": "3 sec",
+                "driver": order.driver,
+                "cooking": f"{order.cooking_time} sec",
                 "eta": "Completed",
+            }
+        )
+
+    @staticmethod
+    def order_failed(order):
+
+        event_bus.result.emit(
+            {
+                "status": f"❌ {order.failure_stage} Failed",
+                "driver": "-",
+                "cooking": "-",
+                "eta": order.failure_reason,
             }
         )

@@ -12,19 +12,17 @@ from models.order import Order
 
 
 class MenuPanel(QGroupBox):
+
     def __init__(self):
         super().__init__("Place Order")
 
         layout = QVBoxLayout(self)
-
-        # Customer Name
         layout.addWidget(QLabel("Customer Name"))
 
         self.customer_name = QLineEdit()
         self.customer_name.setPlaceholderText("Enter customer name")
         layout.addWidget(self.customer_name)
 
-        layout.addSpacing(10)
 
         layout.addWidget(QLabel("Menu"))
 
@@ -47,7 +45,7 @@ class MenuPanel(QGroupBox):
 
             row.addWidget(label)
             row.addStretch()
-            row.addWidget(selector)   # <-- This was missing
+            row.addWidget(selector)
 
             layout.addLayout(row)
 
@@ -56,7 +54,11 @@ class MenuPanel(QGroupBox):
         layout.addStretch()
 
         self.submit_button = QPushButton("Submit Order")
+        self.history_button = QPushButton("View Order History")
+
         layout.addWidget(self.submit_button)
+        layout.addWidget(self.history_button)
+
     def create_order(self):
 
         customer = self.customer_name.text().strip()
@@ -80,7 +82,9 @@ class MenuPanel(QGroupBox):
             customer=customer,
             items=items,
         )
+
     def clear_form(self):
+
         self.customer_name.clear()
 
         for selector in self.items.values():

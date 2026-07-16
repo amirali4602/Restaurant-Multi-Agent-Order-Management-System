@@ -1,0 +1,9 @@
+QMainWindow {
+    background: #18181B;
+}
+
+QStatusBar {
+    background: #FAF8F5;
+    border-top: 1px solid #DDDDDD;
+    color: #555555;
+}
