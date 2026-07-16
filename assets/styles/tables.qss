@@ -1,0 +1,26 @@
+QTableWidget {
+    background-color: #27272A;
+    color: #F4F4F5;
+    alternate-background-color: #313135;
+    gridline-color: #444;
+    selection-background-color: #EA580C;
+    selection-color: white;
+}
+
+QTableWidget::item {
+    color: #F4F4F5;
+    background: transparent;
+}
+
+QHeaderView::section {
+    background-color: #3F3F46;
+    color: white;
+    border: none;
+    padding: 6px;
+    font-weight: bold;
+}
+
+QTableWidget::item:selected {
+    background: #EA580C;
+    color: white;
+}

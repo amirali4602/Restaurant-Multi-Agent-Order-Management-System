@@ -1,5 +1,6 @@
-from PySide6.QtWidgets import QLabel, QGroupBox, QVBoxLayout
+from PySide6.QtWidgets import QGridLayout, QGroupBox
 
+from gui.widgets.agent_card import AgentCard
 from services.event_bus import event_bus
 
 
@@ -8,47 +9,33 @@ class AgentMonitor(QGroupBox):
     def __init__(self):
         super().__init__("Agent Monitor")
 
-        layout = QVBoxLayout(self)
+        layout = QGridLayout(self)
 
-        self.order = QLabel("⚪ Order Agent      WAITING")
-        self.inventory = QLabel("⚪ Inventory Agent  WAITING")
-        self.chef = QLabel("⚪ Chef Agent       WAITING")
-        self.delivery = QLabel("⚪ Delivery Agent   WAITING")
+        self.order = AgentCard("🤖", "Order Agent")
+        self.inventory = AgentCard("📦", "Inventory Agent")
+        self.chef = AgentCard("👨‍🍳", "Chef Agent")
+        self.delivery = AgentCard("🚚", "Delivery Agent")
 
-        layout.addWidget(self.order)
-        layout.addWidget(self.inventory)
-        layout.addWidget(self.chef)
-        layout.addWidget(self.delivery)
+        layout.addWidget(self.order, 0, 0)
+        layout.addWidget(self.inventory, 0, 1)
+        layout.addWidget(self.chef, 1, 0)
+        layout.addWidget(self.delivery, 1, 1)
 
-        layout.addStretch()
+        layout.setColumnStretch(0, 1)
+        layout.setColumnStretch(1, 1)
 
         event_bus.order_status.connect(
-            self.set_order_status
+            self.order.set_status
         )
 
         event_bus.inventory_status.connect(
-            self.set_inventory_status
+            self.inventory.set_status
         )
 
         event_bus.chef_status.connect(
-            self.set_chef_status
+            self.chef.set_status
         )
 
         event_bus.delivery_status.connect(
-            self.set_delivery_status
+            self.delivery.set_status
         )
-        self.set_order_status("IDLE")
-        self.set_inventory_status("IDLE")
-        self.set_chef_status("IDLE")
-        self.set_delivery_status("IDLE")
-    def set_order_status(self, status):
-        self.order.setText(f"🤖 Order Agent      {status}")
-
-    def set_inventory_status(self, status):
-        self.inventory.setText(f"📦 Inventory Agent  {status}")
-
-    def set_chef_status(self, status):
-        self.chef.setText(f"👨‍🍳 Chef Agent       {status}")
-
-    def set_delivery_status(self, status):
-        self.delivery.setText(f"🚚 Delivery Agent   {status}")

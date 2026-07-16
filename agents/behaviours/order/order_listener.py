@@ -12,6 +12,7 @@ from models.order import Order
 from models.order_status import OrderStatus
 
 from services.logger import AppLogger
+from services.notification_service import NotificationService
 
 
 class OrderListener(CyclicBehaviour):
@@ -25,9 +26,9 @@ class OrderListener(CyclicBehaviour):
 
         performative = msg.get_metadata("performative")
 
-        # -------------------------
-        # Inventory Response
-        # -------------------------
+        # ------------------------------------------------
+        # Inventory Success
+        # ------------------------------------------------
 
         if performative == Performative.INVENTORY_OK.value:
 
@@ -40,14 +41,6 @@ class OrderListener(CyclicBehaviour):
             AppLogger.info(
                 f"[{order.order_id}] Inventory Status: {order.status}"
             )
-
-            if order.status != OrderStatus.INVENTORY_CONFIRMED.value:
-
-                AppLogger.warning(
-                    "Inventory unavailable."
-                )
-
-                return
 
             chef_message = Message(
                 to=CHEF_AGENT_JID
@@ -66,9 +59,31 @@ class OrderListener(CyclicBehaviour):
                 "OrderAgent -> ChefAgent | PREPARE_ORDER"
             )
 
-        # -------------------------
-        # Chef Response
-        # -------------------------
+        # ------------------------------------------------
+        # Inventory Failed
+        # ------------------------------------------------
+
+        elif performative == Performative.INVENTORY_FAILED.value:
+
+            AppLogger.info(
+                "OrderAgent <- InventoryAgent | INVENTORY_FAILED"
+            )
+
+            order = Order.from_json(msg.body)
+            NotificationService.order_failed(order)
+            NotificationService.order_completed()
+
+            AppLogger.warning(
+                f"[{order.order_id}] Order cancelled."
+            )
+
+            AppLogger.warning(
+                f"Reason: {order.failure_reason}"
+            )
+
+        # ------------------------------------------------
+        # Chef Success
+        # ------------------------------------------------
 
         elif performative == Performative.ORDER_READY.value:
 
@@ -95,9 +110,9 @@ class OrderListener(CyclicBehaviour):
                 "OrderAgent -> DeliveryAgent | REQUEST_DELIVERY"
             )
 
-        # -------------------------
-        # Delivery Response
-        # -------------------------
+        # ------------------------------------------------
+        # Delivery Success
+        # ------------------------------------------------
 
         elif performative == Performative.DELIVERED.value:
 
@@ -109,4 +124,40 @@ class OrderListener(CyclicBehaviour):
 
             AppLogger.info(
                 f"[{order.order_id}] Order delivered successfully!"
+            )
+        elif performative == Performative.CHEF_FAILED.value:
+
+            AppLogger.info(
+                "OrderAgent <- ChefAgent | CHEF_FAILED"
+            )
+
+            order = Order.from_json(msg.body)
+
+            NotificationService.order_failed(order)
+            NotificationService.order_completed()
+
+            AppLogger.warning(
+                f"[{order.order_id}] Order cancelled."
+            )
+
+            AppLogger.warning(
+                f"Reason: {order.failure_reason}"
+            )
+        elif performative == Performative.DELIVERY_FAILED.value:
+
+            AppLogger.info(
+                "OrderAgent <- DeliveryAgent | DELIVERY_FAILED"
+            )
+
+            order = Order.from_json(msg.body)
+
+            NotificationService.order_failed(order)
+            NotificationService.order_completed()
+
+            AppLogger.warning(
+                f"[{order.order_id}] Order cancelled."
+            )
+
+            AppLogger.warning(
+                f"Reason: {order.failure_reason}"
             )

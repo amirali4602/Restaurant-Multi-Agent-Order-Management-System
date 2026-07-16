@@ -1,0 +1,15 @@
+#statCard,
+#agentCard {
+    background: #27272A;
+    border: 1px solid #3F3F46;
+    border-radius: 12px;
+}
+#statCard:hover {
+
+    border: 2px solid #F57C00;
+}
+
+#agentCard:hover {
+
+    border: 2px solid #F57C00;
+}

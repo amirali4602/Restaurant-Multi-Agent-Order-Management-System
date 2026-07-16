@@ -2,6 +2,9 @@ import asyncio
 import random
 from datetime import datetime
 
+from config.settings import DELIVERY_FAILURE_RATE
+from database.repository import OrderRepository
+
 from spade.behaviour import CyclicBehaviour
 from spade.message import Message
 
@@ -49,6 +52,42 @@ class DeliveryListener(CyclicBehaviour):
         ]
 
         order.driver = random.choice(drivers)
+        if random.random() < DELIVERY_FAILURE_RATE:
+            order.status = OrderStatus.CANCELLED.value
+            order.failure_stage = "Delivery"
+            order.failure_reason = random.choice(
+                [
+                    "Driver unavailable",
+                    "Vehicle breakdown",
+                    "Customer not available",
+                    "Bad weather conditions",
+                ]
+            )
+
+            order.completed_at = datetime.now().isoformat(
+                timespec="seconds"
+            )
+
+            OrderRepository.save(order)
+
+            AppLogger.warning(
+                f"[{order.order_id}] {order.failure_reason}"
+            )
+
+            reply = Message(
+                to=str(msg.sender)
+            )
+
+            reply.set_metadata(
+                "performative",
+                Performative.DELIVERY_FAILED.value
+            )
+
+            reply.body = order.to_json()
+
+            await self.send(reply)
+
+            return
         order.status = OrderStatus.OUT_FOR_DELIVERY.value
 
         NotificationService.delivery_started()

@@ -21,6 +21,9 @@ class Order:
     created_at: str = ""
     completed_at: str = ""
 
+    failure_stage: str = ""
+    failure_reason: str = ""
+
     @classmethod
     def create(cls, customer, items):
 
@@ -45,6 +48,8 @@ class Order:
                 "delivery_time": self.delivery_time,
                 "created_at": self.created_at,
                 "completed_at": self.completed_at,
+                "failure_stage": self.failure_stage,
+                "failure_reason": self.failure_reason,
             }
         )
 
@@ -63,6 +68,8 @@ class Order:
             delivery_time=data.get("delivery_time", 0),
             created_at=data.get("created_at", ""),
             completed_at=data.get("completed_at", ""),
+            failure_stage=data.get("failure_stage", ""),
+            failure_reason=data.get("failure_reason", ""),
         )
 
     def __str__(self):
@@ -72,9 +79,11 @@ class Order:
             f"id={self.order_id}, "
             f"customer='{self.customer}', "
             f"items={self.items}, "
-            f"status={self.status}, "
+            f"status='{self.status}', "
             f"driver='{self.driver}', "
             f"cooking_time={self.cooking_time}, "
-            f"delivery_time={self.delivery_time}"
+            f"delivery_time={self.delivery_time}, "
+            f"failure_stage='{self.failure_stage}', "
+            f"failure_reason='{self.failure_reason}'"
             f")"
         )

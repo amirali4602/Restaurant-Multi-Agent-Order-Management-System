@@ -1,0 +1,18 @@
+/* ========= Restaurant Theme =========
+
+Background      #ECE8DF
+Surface         #FAF8F5
+Card            #FFF9F1
+
+Primary         #F57C00
+Primary Hover   #EF6C00
+Primary Press   #D84315
+
+Success         #4CAF50
+Warning         #FFC107
+Danger          #E53935
+
+Text            #2D3748
+Subtitle        #777777
+
+===================================== */
